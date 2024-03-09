@@ -1,0 +1,52 @@
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:1111/eureka/
+    healthcheck:
+      enabled: true
+    preferSameZoneEureka: true
+  instance:
+    prefer-ip-address: true
+    metadataMap:
+      zone: zone1
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+  endpoint:
+    health:
+      show-details: always
+      probes:
+        enabled: true
+  tracing:
+    enabled: true
+    sampling.probability: 1.0
+
+        
+spring:
+  datasource:
+    url: jdbc:h2:mem:testdb
+  kafka:
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.LongSerializer    
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer  
+    consumer:
+       key-deserializer: org.apache.kafka.common.serialization.LongDeserializer  
+       value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer  
+       properties:
+        spring.json.trusted.packages: '*'   
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: http://localhost:8180/realms/store
+        
+channels:
+  order: 'orders'
+  ticket: 'tickets'
+  delivery: 'livraisons'
+  ticket-command: 'tickets-command'
+  payment-command: 'payments-command'
+  order-response: 'order-response'
